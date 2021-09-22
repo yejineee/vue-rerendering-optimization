@@ -2,7 +2,7 @@
   <div class="rr-item">
     <div class="rr-item__check">
       <input
-        :input-value="isChecked"
+        :checked="isChecked"
         type="checkbox"
         @change="$emit('change:checked', $event.target.checked)"
       >
