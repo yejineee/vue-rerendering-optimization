@@ -7,6 +7,7 @@ import Example4p1 from '@/views/Example4p1.vue'
 import Example4p2 from '@/views/Example4p2.vue'
 import Example4p3 from '@/views/Example4p3.vue'
 import Example5 from '@/views/Example5.vue'
+import Yejin from '@/views/Yejin.vue'
 
 export const routes = [
   {
@@ -139,6 +140,18 @@ This trick shows how IntersectionObserver can be used to skip DOM updates for th
 Add some items. Each item toggles a heavy svg to blink every 500ms. Notice how lattency grows.
 Enable IntersectionObserver. It will hide svg-s outside of the viewport by using css display none.
 That helps performance a lot.
+          `
+        }
+      },
+      {
+        path: '/yejin',
+        name: 'yejin',
+        component: Yejin,
+        meta: {
+          title: 'Yejin - performance optimized',
+          description: `
+          `,
+          instructions: `
           `
         }
       }
