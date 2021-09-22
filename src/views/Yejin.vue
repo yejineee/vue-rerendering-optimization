@@ -1,60 +1,62 @@
 <template>
   <div>
-    <p>
-      <input v-model="itemsCount" :style="{ width: '100px' }" type="number">
-      <button @click="isActive = !isActive">
-        {{ isActive ? 'Hide Items' : `Show ${itemsCount} Items` }}
-      </button>
-    </p>
-    <p>
-      <label>
-        <input v-model="intersectionObserverIsActive" type="checkbox">
-          Enable IntersectionObserver
-      </label>
-    </p>
-    <div v-if="isActive && Number(itemsCount)">
-      <div
-        v-for="i in Number(itemsCount)"
-        :key="i"
-        v-node-intersect="intersectionObserverIsActive ? intersectionObserver : undefined"
-        :class="{
-          'rr-intersectionable': intersectionObserverIsActive
-        }"
-      >
-        <HeavyItem />
-      </div>
-    </div>
+    <yejin-item
+      v-for="data in extendedData"
+      :key="data.id"
+      :item="data.item"
+      :is-checked="data.isChecked"
+      @update:title="updateTitle({id: data.id, title: $event})"
+     />
   </div>
 </template>
 
 <script>
-import HeavyItem from '@/components/HeavyItem.vue'
+import { mapActions, mapGetters } from 'vuex'
+import YejinItem from '@/components/YejinItem'
 
 export default {
   components: {
-    HeavyItem
+    YejinItem
   },
   data () {
     return {
-      itemsCount: 100,
-      isActive: false,
-      intersectionObserver: null,
-      intersectionObserverIsActive: false
+      extendedData: [],
+      dataById: {}
     }
   },
+  created () {
+    this.addItems({ total: 4 })
+  },
   mounted () {
-    this.intersectionObserver = new IntersectionObserver(this.handleIntersection)
+  },
+  computed: {
+    ...mapGetters('yejin', ['items'])
   },
   methods: {
-    handleIntersection (entries) {
-      entries.forEach((entry) => {
-        const className = 'rr-intersectionable--invisible'
-        if (entry.isIntersecting && entry.target.classList.contains(className)) {
-          entry.target.classList.remove(className)
-        } else if (!entry.isIntersecting && !entry.target.classList.contains(className)) {
-          entry.target.classList.add(className)
+    ...mapActions('yejin', ['addItems']),
+    updateTitle ({ id, title }) {
+      const data = this.dataById[id]
+      if (data) {
+        this.dataById[id].item = {
+          ...data.item,
+          title
         }
-      })
+      }
+    }
+  },
+  watch: {
+    items () {
+      this.extendedData = this.items.map(item => ({
+        id: item.id,
+        item,
+        isChecked: false
+      }))
+    },
+    extendedData () {
+      this.dataById = this.extendedData.reduce((out, data) => {
+        out[data.id] = data
+        return out
+      }, {})
     }
   }
 }
