@@ -1,5 +1,7 @@
 <template>
   <div>
+    <button @click="addItems">Add 10 items</button>
+    <button @click="clear">Clear</button>
     <yejin-item
       v-for="data in extendedData"
       :key="data.id"
@@ -34,7 +36,7 @@ export default {
     ...mapGetters('yejin', ['items'])
   },
   methods: {
-    ...mapActions('yejin', ['addItems']),
+    ...mapActions('yejin', ['addItems', 'clear']),
     updateTitle ({ id, title }) {
       const data = this.dataById[id]
       if (data) {
