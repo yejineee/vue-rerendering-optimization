@@ -55,11 +55,17 @@ export default {
   },
   watch: {
     items () {
-      this.extendedData = this.items.map(item => ({
-        id: item.id,
-        item,
-        isChecked: false
-      }))
+      this.extendedData = this.items.map(item => {
+        const data = this.dataById[item.id]
+        if (data) {
+          return data
+        }
+        return {
+          id: item.id,
+          item,
+          isChecked: false
+        }
+      })
     },
     extendedData () {
       this.dataById = this.extendedData.reduce((out, data) => {
