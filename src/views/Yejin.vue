@@ -6,6 +6,7 @@
       :item="data.item"
       :is-checked="data.isChecked"
       @update:title="updateTitle({id: data.id, title: $event})"
+      @change:checked="changeChecked({id: data.id, checked: $event})"
      />
   </div>
 </template>
@@ -41,6 +42,12 @@ export default {
           ...data.item,
           title
         }
+      }
+    },
+    changeChecked ({ id, checked }) {
+      const data = this.dataById[id]
+      if (data) {
+        this.dataById[id].isChecked = checked
       }
     }
   },
